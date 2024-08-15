@@ -1,0 +1,17 @@
+{
+    "name": "Astral Wanderer",
+    "description": "An ancient race of humans in space suits who have transcended the physical limitations of their world, learning the secrets of gravity and existing within the fabric of space-time.",
+    "powers": [
+        "wander:active/intangible",
+        "wander:active/float",
+        "wander:active/pulse",
+        "wander:passive/suit",
+        "wander:passive/mining",
+        "wander:passive/sleep",
+        "wander:credits"
+    ],
+    "icon": {
+        "item": "minecraft:recovery_compass"
+    },
+    "impact": 3
+}

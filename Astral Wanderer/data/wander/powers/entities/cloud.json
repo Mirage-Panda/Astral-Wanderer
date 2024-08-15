@@ -1,0 +1,29 @@
+{
+    "type": "origins:multiple",
+    "velocity": {
+      "type": "origins:modify_velocity",
+      "modifier": {
+        "value": -1,
+        "operation": "multiply_total"
+      },
+      "axes": [
+        "x",
+        "z"
+      ]
+    },
+    "particles": {
+      "type": "origins:action_over_time",
+      "entity_action": {
+        "type": "origins:execute_command",
+        "command": "particle cloud ~ ~ ~ 0.5 0 0.5 0 2 force"
+      },
+      "interval": 1
+    },
+    "damage": {
+      "type": "origins:damage_over_time",
+      "interval": 7,
+      "onset_delay": 0,
+      "damage": 1.0,
+      "damage_type": "minecraft:in_wall"
+      }
+    }

@@ -1,0 +1,111 @@
+{
+    "type": "origins:multiple",
+    "phasing": {
+        "type": "origins:phasing",
+        "block_condition": {
+            "type": "origins:and",
+            "conditions": [
+                {
+                    "type": "origins:in_tag",
+                    "tag": "origins:unphasable"
+                },
+                {
+                    "inverted": true,
+                    "type": "origins:in_tag",
+                    "tag": "origins:unphasable"
+                }
+            ]
+        },
+        "blacklist": true,
+        "render_type": "blindness",
+        "view_distance": 0,
+        "phase_down_condition": {
+            "type": "origins:and",
+            "conditions": [
+                {
+                    "type": "origins:sneaking"
+                }
+            ]
+        }
+    },
+    "invisible": {
+        "type": "origins:invisibility",
+        "render_armor": false,
+        "render_outline": true
+    },
+    "outline": {
+        "type": "origins:self_glow",
+        "entity_condition": {
+            "type": "origins:power",
+            "power": "*:*"
+        },
+        "use_teams": false,
+        "red": 0.6,
+        "green": 0.6,
+        "blue": 1
+    },
+    "dmg": {
+        "type": "origins:modify_damage_taken",
+        "modifier": {
+            "operation": "set_total",
+            "value": 0
+        }
+    },
+    "speed": {
+        "type": "origins:modify_velocity",
+        "axes": [
+            "x",
+            "z"
+        ],
+        "modifier": {
+            "value": 0.8,
+            "operation": "multiply_total"
+        }
+    },
+    "jump": {
+        "type": "origins:modify_jump",
+        "modifier": {
+            "value": 0.5,
+            "operation": "multiply_total"
+        }
+    },
+    "item": {
+        "condition": {
+            "type": "origins:power",
+            "power": "*:*"
+        },
+        "type": "origins:prevent_item_use"
+    },
+    "block": {
+        "condition": {
+            "type": "origins:power",
+            "power": "*:*"
+        },
+        "type": "origins:prevent_block_use"
+    },
+    "select": {
+        "condition": {
+            "type": "origins:power",
+            "power": "*:*"
+        },
+        "type": "origins:prevent_block_selection"
+    },
+    "entity": {
+        "condition": {
+            "type": "origins:power",
+            "power": "*:*"
+        },
+        "type": "origins:prevent_entity_use"
+    },
+    "hit": {
+        "condition": {
+            "type": "origins:power",
+            "power": "*:*"
+        },
+        "type": "origins:modify_damage_dealt",
+        "modifier": {
+            "operation": "multiply_total",
+            "value": -1
+        }
+    }
+}

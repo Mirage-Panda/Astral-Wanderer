@@ -1,0 +1,348 @@
+{
+    "name": "§6[☄] §rAstral Pulse",
+    "description": "Channel the raw energy of your cosmic shell to unleash a powerful pulse of stellar energy, leaving entities momentarily weightless.",
+    "badges": [
+        {
+            "type": "origins:keybind",
+            "sprite": "origins:textures/gui/badge/active.png",
+            "text": "Ternary ability, [Right Click] to shoot bullet. [Shift]+[Right Click] to cycle through aiming modes."
+        }
+    ],
+    "type": "apoli:multiple",
+    "aiming_mode": {
+        "type": "apoli:resource",
+        "min": 0,
+        "max": 2147483647,
+        "hud_render": {
+            "should_render": false
+        }
+    },
+    "cooldown": {
+        "type": "apoli:cooldown",
+        "cooldown": 20,
+        "hud_render": {
+            "should_render": true
+        }
+    },
+    "change_aiming_mode": {
+        "type": "apoli:active_self",
+        "entity_action": {
+            "type": "apoli:and",
+            "actions": [
+                {
+                    "type": "apoli:change_resource",
+                    "resource": "*:*_aiming_mode",
+                    "change": 1
+                },
+                {
+                    "type": "apoli:if_else_list",
+                    "actions": [
+                        {
+                            "condition": {
+                                "type": "apoli:resource",
+                                "resource": "*:*_aiming_mode",
+                                "comparison": "==",
+                                "compare_to": 1
+                            },
+                            "action": {
+                                "type": "apoli:execute_command",
+                                "command": "tellraw @s {\"text\": \"Switched to manual aiming (w/ gravity) mode!\", \"color\": \"yellow\"}"
+                            }
+                        },
+                        {
+                            "condition": {
+                                "type": "apoli:resource",
+                                "resource": "*:*_aiming_mode",
+                                "comparison": "==",
+                                "compare_to": 2
+                            },
+                            "action": {
+                                "type": "apoli:execute_command",
+                                "command": "tellraw @s {\"text\": \"Switched to manual aiming (w/o gravity) mode!\", \"color\": \"yellow\"}"
+                            }
+                        },
+                        {
+                            "condition": {
+                                "type": "apoli:constant",
+                                "value": true
+                            },
+                            "action": {
+                                "type": "apoli:and",
+                                "actions": [
+                                    {
+                                        "type": "apoli:execute_command",
+                                        "command": "tellraw @s {\"text\": \"Switched to automatic aiming mode!\", \"color\": \"green\"}"
+                                    },
+                                    {
+                                        "type": "apoli:change_resource",
+                                        "resource": "*:*_aiming_mode",
+                                        "operation": "set",
+                                        "change": 0
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "key": "key.use",
+        "condition": {
+            "type": "apoli:and",
+            "conditions": [
+                {
+                    "type": "apoli:equipped_item",
+                    "equipment_slot": "mainhand",
+                    "item_condition": {
+                        "type": "apoli:empty"
+                    }
+                },
+                {
+                    "type": "apoli:sneaking"
+                }
+            ]
+        }
+    },
+    "projectile_sync": {
+        "type": "apoli:action_over_time",
+        "entity_action": {
+            "type": "apoli:execute_command",
+            "command": "execute as @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile] store result entity @s Air short 1 run time query gametime"
+        },
+        "interval": 1
+    },
+    "fire": {
+        "type": "apoli:active_self",
+        "entity_action": {
+            "type": "apoli:and",
+            "actions": [
+                {
+                    "type": "apoli:execute_command",
+                    "command": "forceload add 0 0"
+                },
+                {
+                    "type": "apoli:if_else_list",
+                    "actions": [
+                        {
+                            "condition": {
+                                "type": "apoli:resource",
+                                "resource": "*:*_aiming_mode",
+                                "comparison": "==",
+                                "compare_to": 0
+                            },
+                            "action": {
+                                "type": "apoli:raycast",
+                                "distance": 64,
+                                "entity": true,
+                                "block": true,
+                                "hit_action": {
+                                    "type": "apoli:and",
+                                    "actions": [
+                                        {
+                                            "type": "apoli:if_else",
+                                            "condition": {
+                                                "type": "apoli:command",
+                                                "command": "execute if entity @e[tag = shulker_bullet.target]",
+                                                "comparison": ">=",
+                                                "compare_to": 1
+                                            },
+                                            "if_action": {
+                                                "type": "apoli:and",
+                                                "actions": [
+                                                    {
+                                                        "type": "apoli:execute_command",
+                                                        "command": "title @s actionbar [{\"text\": \"\", \"color\": \"green\"}, \"Found target: \", {\"selector\": \"@e[tag = shulker_bullet.target]\", \"color\": \"yellow\"}, \"!\"]"
+                                                    },
+                                                    {
+                                                        "type": "apoli:trigger_cooldown",
+                                                        "power": "*:*_cooldown"
+                                                    }
+                                                ]
+                                            },
+                                            "else_action": {
+                                                "type": "apoli:execute_command",
+                                                "command": "title @s actionbar {\"text\": \"No targets found!\", \"color\": \"red\"}"
+                                            }
+                                        },
+                                        {
+                                            "type": "apoli:execute_command",
+                                            "command": "tag @e remove shulker_bullet.target"
+                                        }
+                                    ]
+                                },
+                                "miss_action": {
+                                    "type": "apoli:execute_command",
+                                    "command": "title @s actionbar {\"text\": \"No targets found!\", \"color\": \"red\"}"
+                                },
+                                "bientity_action": {
+                                    "type": "apoli:and",
+                                    "actions": [
+                                        {
+                                            "type": "apoli:target_action",
+                                            "action": {
+                                                "type": "apoli:execute_command",
+                                                "command": "tag @s add shulker_bullet.target"
+                                            }
+                                        },
+                                        {
+                                            "type": "apoli:actor_action",
+                                            "action": {
+                                                "type": "apoli:and",
+                                                "actions": [
+                                                    {
+                                                        "type": "apoli:execute_command",
+                                                        "command": "execute anchored eyes positioned ^ ^ ^0.5 run summon minecraft:shulker_bullet ~ ~ ~ {Tags: [\"shulker_bullet.projectile\", \"shulker_bullet.projectile.tmp\"]}"
+                                                    },
+                                                    {
+                                                        "type": "apoli:execute_command",
+                                                        "command": "data modify entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Steps set value 12"
+                                                    },
+                                                    {
+                                                        "type": "apoli:execute_command",
+                                                        "command": "data modify entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Target set from entity @e[tag = shulker_bullet.target, limit = 1] UUID"
+                                                    },
+                                                    {
+                                                        "type": "apoli:execute_command",
+                                                        "command": "data modify entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Owner set from entity @s UUID"
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                "bientity_condition": {
+                                    "type": "apoli:target_condition",
+                                    "condition": {
+                                        "type": "apoli:living"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "condition": {
+                                "type": "apoli:and",
+                                "conditions": [
+                                    {
+                                        "type": "apoli:resource",
+                                        "resource": "*:*_aiming_mode",
+                                        "comparison": ">=",
+                                        "compare_to": 1
+                                    },
+                                    {
+                                        "type": "apoli:resource",
+                                        "resource": "*:*_aiming_mode",
+                                        "comparison": "<=",
+                                        "compare_to": 2
+                                    }
+                                ]
+                            },
+                            "action": {
+                                "type": "apoli:and",
+                                "actions": [
+                                    {
+                                        "type": "apoli:execute_command",
+                                        "command": "execute anchored eyes positioned ^ ^ ^0.5 run summon minecraft:shulker_bullet ~ ~ ~ {Tags: [\"shulker_bullet.projectile\", \"shulker_bullet.projectile.tmp\"]}"
+                                    },
+                                    {
+                                        "type": "apoli:execute_command",
+                                        "command": "execute positioned 0.0 0 0.0 run summon minecraft:area_effect_cloud ^ ^ ^9 {Tags: [\"shulker_bullet.direction\"]}"
+                                    },
+                                    {
+                                        "type": "apoli:execute_command",
+                                        "command": "data modify entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Steps set value 0"
+                                    },
+                                    {
+                                        "type": "apoli:execute_command",
+                                        "command": "data modify entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Owner set from entity @s UUID"
+                                    },
+                                    {
+                                        "type": "apoli:if_else",
+                                        "condition": {
+                                            "type": "apoli:resource",
+                                            "resource": "*:*_aiming_mode",
+                                            "comparison": "==",
+                                            "compare_to": 2
+                                        },
+                                        "if_action": {
+                                            "type": "apoli:and",
+                                            "actions": [
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "data modify entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] NoGravity set value 1b"
+                                                },
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "execute store result entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Motion[0] double 0.1 run data get entity @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction, limit = 1] Pos[0]"
+                                                },
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "execute store result entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Motion[1] double 0.1 run data get entity @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction, limit = 1] Pos[1]"
+                                                },
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "execute store result entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Motion[2] double 0.1 run data get entity @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction, limit = 1] Pos[2]"
+                                                }
+                                            ]
+                                        },
+                                        "else_action": {
+                                            "type": "apoli:and",
+                                            "actions": [
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "execute store result entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Motion[0] double 0.2 run data get entity @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction, limit = 1] Pos[0]"
+                                                },
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "execute store result entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Motion[1] double 0.2 run data get entity @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction, limit = 1] Pos[1]"
+                                                },
+                                                {
+                                                    "type": "apoli:execute_command",
+                                                    "command": "execute store result entity @e[type = minecraft:shulker_bullet, tag = shulker_bullet.projectile.tmp, limit = 1] Motion[2] double 0.2 run data get entity @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction, limit = 1] Pos[2]"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "apoli:execute_command",
+                                        "command": "kill @e[type = minecraft:area_effect_cloud, tag = shulker_bullet.direction]"
+                                    },
+                                    {
+                                        "type": "apoli:trigger_cooldown",
+                                        "power": "*:*_cooldown"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "apoli:execute_command",
+                    "command": "tag @e remove shulker_bullet.projectile.tmp"
+                }
+            ]
+        },
+        "key": "key.use",
+        "condition": {
+            "type": "apoli:and",
+            "conditions": [
+                {
+                    "type": "apoli:equipped_item",
+                    "equipment_slot": "mainhand",
+                    "item_condition": {
+                        "type": "apoli:empty"
+                    }
+                },
+                {
+                    "type": "apoli:resource",
+                    "resource": "*:*_cooldown",
+                    "comparison": "==",
+                    "compare_to": 0
+                },
+                {
+                    "type": "apoli:sneaking",
+                    "inverted": true
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "name": "§e[±] §rCosmic Shell",
+    "description": "As an Astral Wanderer, your form is bound to the Cosmic Shell, a space suit that has become an inseparable part of your being. Crafted from otherworldly materials, it grants you protection, anchoring you to this plane, preventing you from ever removing it.",
+    "type": "origins:action_on_callback",
+    "entity_action_chosen": {
+        "type": "origins:and",
+        "actions": [
+            {
+                "type": "origins:execute_command",
+                "command": "attribute @s minecraft:generic.armor base set 6"
+            },
+            {
+                "type": "origins:execute_command",
+                "command": "function wander:equip"
+            }
+        ]
+    },
+    "execute_chosen_when_orb": true,
+    "entity_action_lost": {
+        "type": "origins:and",
+        "actions": [
+            {
+                "type": "origins:execute_command",
+                "command": "attribute @s minecraft:generic.armor base set 0"
+            },
+            {
+                "type": "origins:execute_command",
+                "command": "item replace entity @s armor.head with air"
+            },
+            {
+                "type": "origins:execute_command",
+                "command": "item replace entity @s armor.chest with air"
+            },
+            {
+                "type": "origins:execute_command",
+                "command": "item replace entity @s armor.legs with air"
+            },
+            {
+                "type": "origins:execute_command",
+                "command": "item replace entity @s armor.feet with air"
+            }
+        ]
+    }
+}

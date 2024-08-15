@@ -1,0 +1,78 @@
+{
+  "type": "origins:multiple",
+  "velocity": {
+    "type": "origins:modify_velocity",
+    "modifier": {
+      "value": -1,
+      "operation": "multiply_total"
+    },
+    "axes": [
+      "x",
+      "y",
+      "z"
+    ]
+  },
+  "particles": {
+    "type": "origins:action_over_time",
+    "entity_action": {
+      "type": "origins:execute_command",
+      "command": "particle dust_color_transition{from_color:[0.655,0.059,1.000],scale:1.5,to_color:[0.655,0.059,1.000]} ~ ~ ~ 0.5 0 0.5 0 1000 force"
+    },
+    "interval": 1
+  },
+  "dmg": {
+    "type": "origins:modify_damage_taken",
+    "modifier": {
+      "operation": "set_total",
+      "value": 0
+    }
+  },
+  "levitate": {
+    "type": "origins:action_over_time",
+    "entity_action": {
+      "type": "origins:area_of_effect",
+      "radius": 4,
+      "shape": "sphere",
+      "include_actor": false,
+      "bientity_action": {
+        "type": "origins:and",
+        "actions": [
+          {
+            "type": "origins:target_action",
+            "action": {
+              "type": "origins:apply_effect",
+              "effect": {
+                "effect": "minecraft:levitation",
+                "amplifier": 1,
+                "duration": 150,
+                "show_icon": false,
+                "show_particles": false
+              }
+            }
+          },
+          {
+            "type": "origins:target_action",
+            "action": {
+              "type": "origins:grant_power",
+              "power": "*:entities/cloud",
+              "source": "apoli:command"
+            }
+          },
+          {
+            "type": "origins:target_action",
+            "action": {
+              "type": "origins:delay",
+              "ticks": 150,
+              "action": {
+                "type": "origins:revoke_power",
+                "power": "*:entities/cloud",
+                "source": "apoli:command"
+              }
+            }
+          }
+        ]
+      },
+      "interval": 1
+    }
+  }
+}

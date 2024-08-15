@@ -1,0 +1,62 @@
+{
+    "name": "§6[☁] §rStellar Form",
+    "description": "Harness the boundless energy of the cosmos to phase into a state of pure stardust, allowing you to become intangible for 5 seconds.",
+    "badges": [
+        {
+            "type": "origins:keybind",
+            "sprite": "origins:textures/gui/badge/active.png",
+            "text": "Primary ability, use %s to become intangible. Press %s when intangible to disable."
+        },
+        {
+            "type": "origins:tooltip",
+            "text": "In stellar form, you can pass through blocks and evade all physical attacks, though you cannot interact with the physical world.",
+            "sprite": "origins:textures/gui/badge/info.png"
+        }
+    ],
+    "type": "origins:multiple",
+    "cooldown": {
+        "type": "origins:cooldown",
+        "cooldown": 100,
+        "hud_render": {
+            "should_render": true,
+            "sprite_location": "origins:textures/gui/community/spiderkolo/resource_bar_03.png",
+            "bar_index": 7
+        },
+        "hidden": false
+    },
+    "active": {
+        "type": "origins:active_self",
+        "entity_action": {
+            "type": "origins:and",
+            "actions": [
+                {
+                    "type": "origins:execute_command",
+                    "command": "power grant @s wander:entities/phase"
+                },
+                {
+                    "type": "origins:trigger_cooldown",
+                    "power": "*:*_cooldown"
+                }
+            ]
+        },
+        "key": "key.origins.primary_active",
+        "cooldown": 100,
+        "hud_render": {
+            "should_render": false
+        }
+    },
+    "over_time": {
+        "type": "origins:action_over_time",
+        "rising_action": {
+            "type": "origins:execute_command",
+            "command": "power remove @s wander:entities/phase"
+        },
+        "interval": 1,
+        "condition": {
+            "type": "origins:resource",
+            "resource": "*:*_cooldown",
+            "comparison": "<",
+            "compare_to": 1
+        }
+    }
+}

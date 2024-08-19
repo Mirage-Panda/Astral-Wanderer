@@ -3,8 +3,8 @@
   "velocity": {
     "type": "origins:modify_velocity",
     "modifier": {
-      "value": -1,
-      "operation": "multiply_total"
+      "amount": -1,
+      "operation": "multiply_total_additive"
     },
     "axes": [
       "x",

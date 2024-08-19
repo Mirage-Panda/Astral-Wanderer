@@ -11,7 +11,7 @@
         "wander:credits"
     ],
     "icon": {
-        "item": "minecraft:recovery_compass"
+        "id": "minecraft:recovery_compass"
     },
     "impact": 3
 }

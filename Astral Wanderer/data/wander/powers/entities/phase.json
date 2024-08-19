@@ -47,8 +47,8 @@
     "dmg": {
         "type": "origins:modify_damage_taken",
         "modifier": {
-            "operation": "set_total",
-            "value": 0
+            "operation": "multiply_total_additive",
+            "amount": -1
         }
     },
     "speed": {

@@ -1,6 +1,6 @@
 # Astral Wanderer
 ## Description
-Inspired by the humans who transcended the 3 dimenions in the movie Interstellar, the Astral Wanderers were born.
+An ancient race of humans in space suits who have transcended the physical limitations of their world, learning the secrets of gravity and existing within the fabric of space-time.
 ## Modrinth Summary/pack.mcmeta
 An ancient race of humans in space suits who have transcended the physical limitations of their world, existing within the fabric of space-time.
 ## Lore
